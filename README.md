@@ -1,6 +1,7 @@
 # Diesel-Safe
 Safe System For QB-Core Fivem FrameWork
 
+[[ BE CAREFULL SCRIPT ISN't 100% Tested But If There Is Any Peoblem With It Just Open Issue Or Contact Me In My Discord Server https://discord.gg/My2BvpRb57 ]] 
 
 System For Createing Safes With Password On Any Locations Using Coords So Be Carefull When You Use It in Apartment System That Utilize Multi Dimension But Same Coords
 
