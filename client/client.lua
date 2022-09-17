@@ -101,7 +101,10 @@ RegisterNetEvent('Diesel-Safe:Client:RemoveSpecificSafe', function(data)
 end)
 
 RegisterNetEvent('Diesel-Safe:Client:FinalizeRemoveSpecificSafe', function(safename)
+    SetEntityAsMissionEntity(SafesObjects[safename], false, false)
+    SetEntityAlpha(SafesObjects[safename], 0, false)
     DeleteObject(SafesObjects[safename])
+    DeleteEntity(SafesObjects[safename])
 end)
 
 RegisterNetEvent('Diesel-Safe:Client:CreateSafeWithType', function(type)
@@ -181,4 +184,9 @@ RegisterNetEvent('Diesel-Safe:Client:FinalizeAddNewSafe', function (hash, coords
         },
         distance = 1.5
     })
+end)
+
+--[[    Commands    ]]
+RegisterCommand('RemoveSafe', function (src, args)
+    TriggerServerEvent('Diesel-Safe:Server:AdminRemoveSafe', args)
 end)
