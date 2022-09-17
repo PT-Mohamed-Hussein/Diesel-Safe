@@ -1,5 +1,7 @@
 Config = {}
 
+Config.WipeStashOnRemove = true --to remove all items inside safe when it gets removed
+
 Config.Safes = {
     [1] = {
         name = 'safe1',
