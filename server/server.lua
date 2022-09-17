@@ -101,7 +101,11 @@ end)
 for i, v in pairs (Config.Safes) do 
     QBCore.Functions.CreateUseableItem(v.name, function(source, item)
         local src = source
-        TriggerClientEvent('Diesel-Safe:Client:CreateSafeWithType', source, v.type)
+        if GetPlayerRoutingBucket(src) == 0 then
+            TriggerClientEvent('Diesel-Safe:Client:CreateSafeWithType', source, v.type)
+        else
+            TriggerClientEvent('QBCore:Notify', src, 'Cannot Place Safe In This Dimention', 'error')
+        end
     end)
 end
 
@@ -118,4 +122,29 @@ RegisterNetEvent('Diesel-Safe:Server:RemoveSpecificSafe', function(name, slots, 
     SafesPassword[name] = nil
     TriggerClientEvent('Diesel-Safe:Client:FinalizeRemoveSpecificSafe', -1, name)
     MySQL.Async.execute('DELETE FROM `diesel-safe` WHERE name = ?', { name })
+    if Config.WipeStashOnRemove then 
+        MySQL.Async.execute('DELETE FROM `stashitems` WHERE stash = ?', { name })
+    end
+end)
+
+
+RegisterNetEvent('Diesel-Safe:Server:AdminRemoveSafe', function(args)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    local name = args[1]
+    if QBCore.Functions.HasPermission (src, 'admin') then
+        if not name then 
+            TriggerClientEvent('QBCore:Notify', src, 'You Have To Enter Safe Name')
+        else
+            Safes[name] = nil
+            SafesPassword[name] = nil
+            TriggerClientEvent('Diesel-Safe:Client:FinalizeRemoveSpecificSafe', -1, name)
+            MySQL.Async.execute('DELETE FROM `diesel-safe` WHERE name = ?', { name })
+            if Config.WipeStashOnRemove then 
+                MySQL.Async.execute('DELETE FROM `stashitems` WHERE stash = ?', { name })
+            end
+        end
+    else
+        TriggerClientEvent('QBCore:Notify', src, 'You Dont Have Permission')
+    end
 end)
